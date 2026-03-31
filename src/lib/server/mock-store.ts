@@ -1,0 +1,118 @@
+import type { Campaign, Contact, DeliveryStatus, MessageEvent, ScheduledMessage } from '$lib/types';
+
+const contacts: Contact[] = [
+	{
+		id: crypto.randomUUID(),
+		name: 'Aulia Grocery',
+		phone: '+6281234567001',
+		tag: 'Retail',
+		createdAt: new Date().toISOString()
+	},
+	{
+		id: crypto.randomUUID(),
+		name: 'Nusantara Laundry',
+		phone: '+6281234567002',
+		tag: 'Service',
+		createdAt: new Date().toISOString()
+	}
+];
+
+const campaigns: Campaign[] = [];
+const schedules: ScheduledMessage[] = [];
+const events: MessageEvent[] = [];
+
+export function listContacts() {
+	return contacts;
+}
+
+export function createContact(payload: Pick<Contact, 'name' | 'phone' | 'tag'>) {
+	const contact: Contact = {
+		id: crypto.randomUUID(),
+		name: payload.name,
+		phone: payload.phone,
+		tag: payload.tag,
+		createdAt: new Date().toISOString()
+	};
+	contacts.unshift(contact);
+	return contact;
+}
+
+export function listCampaigns() {
+	return campaigns;
+}
+
+export function createCampaign(payload: Pick<Campaign, 'title' | 'message' | 'contactIds'>) {
+	const campaign: Campaign = {
+		id: crypto.randomUUID(),
+		title: payload.title,
+		message: payload.message,
+		contactIds: payload.contactIds,
+		createdAt: new Date().toISOString()
+	};
+	campaigns.unshift(campaign);
+	return campaign;
+}
+
+export function listSchedules() {
+	return schedules;
+}
+
+export function createSchedule(payload: Pick<ScheduledMessage, 'campaignId' | 'sendAt'>) {
+	const schedule: ScheduledMessage = {
+		id: crypto.randomUUID(),
+		campaignId: payload.campaignId,
+		sendAt: payload.sendAt,
+		status: 'queued',
+		createdAt: new Date().toISOString()
+	};
+	schedules.unshift(schedule);
+	return schedule;
+}
+
+export function listEvents() {
+	return events;
+}
+
+export function pushEvent(payload: Pick<MessageEvent, 'campaignId' | 'contactId' | 'status'>) {
+	const event: MessageEvent = {
+		id: crypto.randomUUID(),
+		campaignId: payload.campaignId,
+		contactId: payload.contactId,
+		status: payload.status,
+		timestamp: new Date().toISOString()
+	};
+	events.unshift(event);
+	return event;
+}
+
+export function summarizeStatuses() {
+	const totals: Record<DeliveryStatus, number> = {
+		queued: 0,
+		sent: 0,
+		delivered: 0,
+		read: 0,
+		failed: 0
+	};
+
+	for (const event of events) {
+		totals[event.status] += 1;
+	}
+
+	return totals;
+}
+
+export function simulateEvent(status?: DeliveryStatus) {
+	const campaign = campaigns[0];
+	const contact = contacts[0];
+	if (!campaign || !contact) {
+		return null;
+	}
+
+	const options: DeliveryStatus[] = ['sent', 'delivered', 'read', 'failed'];
+	const nextStatus = status ?? options[Math.floor(Math.random() * options.length)];
+	return pushEvent({
+		campaignId: campaign.id,
+		contactId: contact.id,
+		status: nextStatus
+	});
+}

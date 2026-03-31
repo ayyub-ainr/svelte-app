@@ -1,0 +1,282 @@
+@import 'tailwindcss';
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+
+:root {
+	--bg: #f5f4ee;
+	--ink: #0f172a;
+	--muted: #475569;
+	--card: #ffffff;
+	--line: #d6d3d1;
+	--accent: #0f766e;
+	--accent-ink: #ecfeff;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	font-family: 'Plus Jakarta Sans', sans-serif;
+	background:
+		radial-gradient(circle at 10% 10%, #d9f99d 0%, transparent 20%),
+		radial-gradient(circle at 90% 20%, #a7f3d0 0%, transparent 25%), var(--bg);
+	color: var(--ink);
+}
+
+h1,
+h2,
+h3,
+.brand {
+	font-family: 'Space Grotesk', sans-serif;
+	letter-spacing: -0.02em;
+}
+
+.app-bg {
+	min-height: 100vh;
+	padding: 1rem;
+}
+
+.topbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.75rem 1rem;
+	background: color-mix(in oklab, var(--card) 86%, #ecfccb);
+	border: 1px solid var(--line);
+	border-radius: 0.9rem;
+	backdrop-filter: blur(6px);
+	margin-bottom: 1rem;
+}
+
+.brand {
+	text-decoration: none;
+	font-weight: 700;
+	color: var(--ink);
+}
+
+.top-link {
+	text-decoration: none;
+	color: var(--muted);
+	font-weight: 600;
+}
+
+.hero {
+	max-width: 56rem;
+	padding: 2rem 1.25rem;
+}
+
+.eyebrow {
+	text-transform: uppercase;
+	font-weight: 700;
+	font-size: 0.78rem;
+	letter-spacing: 0.08em;
+	color: #115e59;
+}
+
+.hero h1 {
+	font-size: clamp(1.8rem, 5vw, 3.2rem);
+	margin-bottom: 0.75rem;
+}
+
+.hero p {
+	color: var(--muted);
+	line-height: 1.6;
+}
+
+.hero-actions {
+	display: flex;
+	gap: 0.75rem;
+	flex-wrap: wrap;
+	margin-top: 1.25rem;
+}
+
+.milestones {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 0.9rem;
+	padding: 0 1.25rem 1.5rem;
+}
+
+.dash-shell {
+	display: grid;
+	grid-template-columns: minmax(190px, 230px) 1fr;
+	gap: 1rem;
+	align-items: start;
+}
+
+.dash-aside {
+	position: sticky;
+	top: 1rem;
+	padding: 1rem;
+	background: var(--card);
+	border: 1px solid var(--line);
+	border-radius: 0.9rem;
+}
+
+.dash-aside p {
+	color: var(--muted);
+	font-size: 0.9rem;
+	margin-top: 0;
+}
+
+.dash-aside nav {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+}
+
+.dash-aside a {
+	text-decoration: none;
+	padding: 0.45rem 0.55rem;
+	border-radius: 0.45rem;
+	color: #0f172a;
+	font-weight: 600;
+}
+
+.dash-aside a.active {
+	background: #14b8a6;
+	color: var(--accent-ink);
+}
+
+.dash-main section {
+	background: color-mix(in oklab, var(--card) 90%, #e2e8f0);
+	border: 1px solid var(--line);
+	border-radius: 0.9rem;
+	padding: 1rem;
+	animation: fadeIn 220ms ease-out;
+}
+
+.dash-main h1 {
+	margin-top: 0;
+	font-size: 1.65rem;
+}
+
+.dash-main p {
+	color: var(--muted);
+	margin-top: 0;
+}
+
+.kpi-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+	gap: 0.7rem;
+	margin: 1rem 0;
+}
+
+.kpi-card,
+.panel {
+	border: 1px solid var(--line);
+	border-radius: 0.7rem;
+	background: #fff;
+	padding: 0.85rem;
+}
+
+.kpi-card p {
+	font-size: 1.4rem;
+	margin: 0;
+	font-weight: 800;
+	color: #134e4a;
+}
+
+.panel {
+	display: grid;
+	gap: 0.6rem;
+	margin-top: 0.9rem;
+}
+
+.list li {
+	display: grid;
+	gap: 0.2rem;
+	padding: 0.55rem 0;
+	border-bottom: 1px dashed var(--line);
+}
+
+.list li:last-child {
+	border-bottom: 0;
+}
+
+input,
+select,
+textarea,
+button {
+	font: inherit;
+}
+
+input,
+select,
+textarea {
+	border: 1px solid #cbd5e1;
+	border-radius: 0.55rem;
+	padding: 0.58rem 0.62rem;
+	background: #fff;
+}
+
+textarea {
+	min-height: 6rem;
+	resize: vertical;
+}
+
+button,
+a.primary,
+a.ghost {
+	border: none;
+	border-radius: 0.6rem;
+	padding: 0.58rem 0.82rem;
+	cursor: pointer;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 700;
+}
+
+button.primary,
+a.primary {
+	background: var(--accent);
+	color: var(--accent-ink);
+}
+
+a.ghost {
+	background: #e2e8f0;
+	color: #0f172a;
+}
+
+.selector-grid {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+
+.selector-grid button {
+	background: #f1f5f9;
+	color: #1e293b;
+	font-weight: 600;
+}
+
+.selector-grid button.selected {
+	background: #0f766e;
+	color: #f0fdfa;
+}
+
+@media (max-width: 860px) {
+	.dash-shell {
+		grid-template-columns: 1fr;
+	}
+
+	.dash-aside {
+		position: static;
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
