@@ -186,6 +186,49 @@ h3,
 	margin-top: 0.9rem;
 }
 
+.inline-form {
+	grid-template-columns: 1fr auto;
+	align-items: end;
+}
+
+.feedback {
+	margin: 0.4rem 0;
+	padding: 0.55rem 0.7rem;
+	border-radius: 0.5rem;
+	font-size: 0.95rem;
+	font-weight: 600;
+}
+
+.feedback.error {
+	background: #fee2e2;
+	color: #991b1b;
+	border: 1px solid #fecaca;
+}
+
+.feedback.ok {
+	background: #dcfce7;
+	color: #166534;
+	border: 1px solid #bbf7d0;
+}
+
+.chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.45rem;
+	padding: 0.42rem 0.6rem;
+	border: 1px solid var(--line);
+	border-radius: 999px;
+	background: #f8fafc;
+	font-size: 0.92rem;
+}
+
+.item-head {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 0.6rem;
+}
+
 .list li {
 	display: grid;
 	gap: 0.2rem;

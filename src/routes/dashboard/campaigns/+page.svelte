@@ -1,70 +1,44 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import type { Campaign, Contact } from '$lib/types';
+	import type { ActionData, PageData } from './$types';
 
-	let campaigns = $state<Campaign[]>([]);
-	let contacts = $state<Contact[]>([]);
-	let title = $state('');
-	let message = $state('');
-	let selectedIds = $state<string[]>([]);
-
-	async function loadData() {
-		const [campaignRes, contactRes] = await Promise.all([
-			fetch('/api/campaigns'),
-			fetch('/api/contacts')
-		]);
-		campaigns = (await campaignRes.json()).campaigns;
-		contacts = (await contactRes.json()).contacts;
-	}
-
-	async function createCampaign() {
-		await fetch('/api/campaigns', {
-			method: 'POST',
-			headers: { 'content-type': 'application/json' },
-			body: JSON.stringify({ title, message, contactIds: selectedIds })
-		});
-		title = '';
-		message = '';
-		selectedIds = [];
-		await loadData();
-	}
-
-	function toggleContact(id: string) {
-		selectedIds = selectedIds.includes(id)
-			? selectedIds.filter((value) => value !== id)
-			: [...selectedIds, id];
-	}
-
-	onMount(loadData);
+	let { data, form }: { data: PageData; form: ActionData } = $props();
 </script>
 
 <section>
 	<h1>Campaign Composer</h1>
 	<p>Create outbound campaign drafts and choose audience contacts.</p>
+	{#if form?.error}
+		<p class="feedback error">{form.error}</p>
+	{:else if form?.success}
+		<p class="feedback ok">Campaign action completed.</p>
+	{/if}
 
-	<div class="panel">
-		<input bind:value={title} placeholder="Campaign title" />
-		<textarea bind:value={message} placeholder="Message template"></textarea>
+	<form method="POST" action="?/create" class="panel">
+		<input name="title" placeholder="Campaign title" required />
+		<textarea name="message" placeholder="Message template" required></textarea>
 		<div class="selector-grid">
-			{#each contacts as contact (contact.id)}
-				<button
-					type="button"
-					class:selected={selectedIds.includes(contact.id)}
-					onclick={() => toggleContact(contact.id)}
-				>
-					{contact.name}
-				</button>
+			{#each data.contacts as contact (contact.id)}
+				<label class="chip">
+					<input type="checkbox" name="contactIds" value={contact.id} />
+					<span>{contact.name}</span>
+				</label>
 			{/each}
 		</div>
-		<button class="primary" onclick={createCampaign}>Save campaign</button>
-	</div>
+		<button class="primary" type="submit">Save campaign</button>
+	</form>
 
 	<ul class="panel list">
-		{#each campaigns as campaign (campaign.id)}
+		{#each data.campaigns as campaign (campaign.id)}
 			<li>
-				<strong>{campaign.title}</strong>
+				<div class="item-head">
+					<strong>{campaign.title}</strong>
+					<em>{campaign.contactIds.length} recipients</em>
+				</div>
 				<span>{campaign.message}</span>
-				<em>{campaign.contactIds.length} recipients</em>
+				<form method="POST" action="?/sendNow">
+					<input type="hidden" name="campaignId" value={campaign.id} />
+					<button class="ghost" type="submit">Send now</button>
+				</form>
 			</li>
 		{/each}
 	</ul>

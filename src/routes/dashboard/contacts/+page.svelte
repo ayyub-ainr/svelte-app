@@ -1,47 +1,27 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import type { Contact } from '$lib/types';
+	import type { ActionData, PageData } from './$types';
 
-	let contacts = $state<Contact[]>([]);
-	let name = $state('');
-	let phone = $state('');
-	let tag = $state('');
-
-	async function loadContacts() {
-		const response = await fetch('/api/contacts');
-		const data = await response.json();
-		contacts = data.contacts;
-	}
-
-	async function addContact() {
-		await fetch('/api/contacts', {
-			method: 'POST',
-			headers: { 'content-type': 'application/json' },
-			body: JSON.stringify({ name, phone, tag })
-		});
-
-		name = '';
-		phone = '';
-		tag = '';
-		await loadContacts();
-	}
-
-	onMount(loadContacts);
+	let { data, form }: { data: PageData; form: ActionData } = $props();
 </script>
 
 <section>
 	<h1>Contacts</h1>
 	<p>Manage recipients for your WhatsApp campaigns.</p>
+	{#if form?.error}
+		<p class="feedback error">{form.error}</p>
+	{:else if form?.success}
+		<p class="feedback ok">Contact added successfully.</p>
+	{/if}
 
-	<div class="panel">
-		<input bind:value={name} placeholder="Business name" />
-		<input bind:value={phone} placeholder="Phone (+62...)" />
-		<input bind:value={tag} placeholder="Tag (Retail, VIP, etc.)" />
-		<button class="primary" onclick={addContact}>Add contact</button>
-	</div>
+	<form method="POST" action="?/create" class="panel">
+		<input name="name" placeholder="Business name" required />
+		<input name="phone" placeholder="Phone (+62...)" required />
+		<input name="tag" placeholder="Tag (Retail, VIP, etc.)" />
+		<button class="primary" type="submit">Add contact</button>
+	</form>
 
 	<ul class="panel list">
-		{#each contacts as contact (contact.id)}
+		{#each data.contacts as contact (contact.id)}
 			<li>
 				<strong>{contact.name}</strong>
 				<span>{contact.phone}</span>

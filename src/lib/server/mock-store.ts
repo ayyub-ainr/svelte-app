@@ -41,6 +41,10 @@ export function listCampaigns() {
 	return campaigns;
 }
 
+export function getCampaignById(campaignId: string) {
+	return campaigns.find((campaign) => campaign.id === campaignId);
+}
+
 export function createCampaign(payload: Pick<Campaign, 'title' | 'message' | 'contactIds'>) {
 	const campaign: Campaign = {
 		id: crypto.randomUUID(),
@@ -67,6 +71,27 @@ export function createSchedule(payload: Pick<ScheduledMessage, 'campaignId' | 's
 	};
 	schedules.unshift(schedule);
 	return schedule;
+}
+
+export function sendCampaignNow(campaignId: string) {
+	const campaign = getCampaignById(campaignId);
+	if (!campaign) {
+		return null;
+	}
+
+	const recipients = contacts.filter((contact) => campaign.contactIds.includes(contact.id));
+	const sentEvents = recipients.map((contact) =>
+		pushEvent({
+			campaignId: campaign.id,
+			contactId: contact.id,
+			status: 'sent'
+		})
+	);
+
+	return {
+		campaign,
+		sentEvents
+	};
 }
 
 export function listEvents() {
@@ -97,6 +122,8 @@ export function summarizeStatuses() {
 	for (const event of events) {
 		totals[event.status] += 1;
 	}
+
+	totals.queued += schedules.filter((schedule) => schedule.status === 'queued').length;
 
 	return totals;
 }
