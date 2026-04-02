@@ -1,8 +1,9 @@
 import { simulateEvent } from '$lib/server/mock-store';
 import { json } from '@sveltejs/kit';
 import type { DeliveryStatus } from '$lib/types';
+import type { RequestHandler } from './$types';
 
-export async function POST({ request }) {
+export const POST: RequestHandler = async ({ request }) => {
 	const body = await request.json().catch(() => ({}));
 	const event = simulateEvent(body?.status as DeliveryStatus | undefined);
 
@@ -14,4 +15,4 @@ export async function POST({ request }) {
 	}
 
 	return json({ event }, { status: 201 });
-}
+};

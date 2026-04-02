@@ -21,9 +21,19 @@ const contacts: Contact[] = [
 const campaigns: Campaign[] = [];
 const schedules: ScheduledMessage[] = [];
 const events: MessageEvent[] = [];
+const providerMessageLinks = new Map<string, { campaignId: string; contactId: string }>();
+
+function normalizePhone(phone: string) {
+	return phone.replace(/[^\d]/g, '');
+}
 
 export function listContacts() {
 	return contacts;
+}
+
+export function findContactByPhone(phone: string) {
+	const target = normalizePhone(phone);
+	return contacts.find((contact) => normalizePhone(contact.phone) === target);
 }
 
 export function createContact(payload: Pick<Contact, 'name' | 'phone' | 'tag'>) {
@@ -44,6 +54,11 @@ export function listCampaigns() {
 
 export function getCampaignById(campaignId: string) {
 	return campaigns.find((campaign) => campaign.id === campaignId);
+}
+
+export function resolveCampaignIdForContact(contactId: string) {
+	const campaign = campaigns.find((item) => item.contactIds.includes(contactId));
+	return campaign?.id;
 }
 
 export function createCampaign(payload: Pick<Campaign, 'title' | 'message' | 'contactIds'>) {
@@ -97,6 +112,18 @@ export function sendCampaignNow(campaignId: string) {
 
 export function listEvents() {
 	return events;
+}
+
+export function linkProviderMessage(
+	providerMessageId: string,
+	campaignId: string,
+	contactId: string
+) {
+	providerMessageLinks.set(providerMessageId, { campaignId, contactId });
+}
+
+export function resolveProviderMessage(providerMessageId: string) {
+	return providerMessageLinks.get(providerMessageId) ?? null;
 }
 
 export function pushEvent(payload: Pick<MessageEvent, 'campaignId' | 'contactId' | 'status'>) {

@@ -1,11 +1,12 @@
 import { createSchedule, getCampaignById, listSchedules } from '$lib/server/mock-store';
 import { json } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
 
-export function GET() {
+export const GET: RequestHandler = () => {
 	return json({ schedules: listSchedules() });
-}
+};
 
-export async function POST({ request }) {
+export const POST: RequestHandler = async ({ request }) => {
 	const body = await request.json();
 	if (!body?.campaignId || !body?.sendAt) {
 		return json({ error: 'campaignId and sendAt are required' }, { status: 400 });
@@ -20,4 +21,4 @@ export async function POST({ request }) {
 		sendAt: body.sendAt
 	});
 	return json({ schedule }, { status: 201 });
-}
+};

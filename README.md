@@ -41,6 +41,19 @@ npm run lint
 - `POST /api/messages/send`
 - `GET /api/status`
 - `POST /api/webhooks/simulate`
+- `GET/POST /api/webhooks/whatsapp`
+
+## Environment Variables (Phase 4)
+
+- `WHATSAPP_API_TOKEN` - Meta Cloud API access token
+- `WHATSAPP_PHONE_NUMBER_ID` - Meta phone number id
+- `WHATSAPP_WEBHOOK_VERIFY_TOKEN` - token used in webhook verification challenge
+- `WHATSAPP_APP_SECRET` - app secret used for `x-hub-signature-256` validation
+
+Provider behavior:
+
+- If `WHATSAPP_API_TOKEN` and `WHATSAPP_PHONE_NUMBER_ID` are present, app uses Meta provider.
+- Otherwise app automatically falls back to mock provider.
 
 ## Phase Checklist
 
@@ -61,6 +74,21 @@ npm run lint
 - [x] KPI/event updates with timed refresh polling
 - [x] Validation baseline: `npm run check` and `npm run lint` pass
 
+### Phase 3 - UX and Learning Instrumentation
+
+- [x] Dashboard KPIs and analytics cards
+- [x] Loading/empty/error/success interaction states
+- [x] In-app learning notes/comments across boundaries
+
+### Phase 4 - Real Integration Bridge
+
+- [x] Provider interface (`sendMessage`, `verifyWebhookSignature`, `parseStatusEvents`)
+- [x] Env-gated provider resolution (mock default, Meta when configured)
+- [x] Meta webhook verification route (`GET/POST /api/webhooks/whatsapp`)
+- [x] Meta status payload mapping to internal delivery statuses
+- [x] Send flow records provider message ids for webhook status correlation
+- [ ] Live Meta sandbox smoke test with real credentials (optional, environment-dependent)
+
 ## Manual Smoke Test (Phase 2)
 
 1. Create one or more contacts in `/dashboard/contacts`.
@@ -73,4 +101,4 @@ npm run lint
 
 ## Next Phase
 
-Phase 3 focuses on UX and learning instrumentation (better empty/loading states, in-app architectural notes, and tighter demo polish).
+Phase 5 focuses on wrap-up: document lessons learned, known limitations, and prioritized backlog for persistence/auth/retry upgrades.
