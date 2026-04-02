@@ -22,7 +22,14 @@
 		summary = data.summary;
 	}
 
-	onMount(loadStatus);
+	onMount(() => {
+		void loadStatus();
+		const intervalId = setInterval(() => {
+			void loadStatus();
+		}, 5000);
+
+		return () => clearInterval(intervalId);
+	});
 </script>
 
 <section>

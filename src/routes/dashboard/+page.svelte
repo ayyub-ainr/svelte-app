@@ -1,8 +1,18 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation';
 	import type { DeliveryStatus } from '$lib/types';
+	import { onMount } from 'svelte';
 	import type { ActionData, PageData } from './$types';
 	let { data, form }: { data: PageData; form: ActionData | null } = $props();
 	const statuses: DeliveryStatus[] = ['queued', 'sent', 'delivered', 'read', 'failed'];
+
+	onMount(() => {
+		const intervalId = setInterval(() => {
+			void invalidateAll();
+		}, 5000);
+
+		return () => clearInterval(intervalId);
+	});
 </script>
 
 <section>

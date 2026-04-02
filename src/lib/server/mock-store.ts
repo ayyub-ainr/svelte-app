@@ -129,17 +129,37 @@ export function summarizeStatuses() {
 }
 
 export function simulateEvent(status?: DeliveryStatus) {
-	const campaign = campaigns[0];
-	const contact = contacts[0];
-	if (!campaign || !contact) {
+	const seededCampaign = campaigns.find((campaign) => campaign.contactIds.length > 0);
+	if (!seededCampaign) {
 		return null;
 	}
 
-	const options: DeliveryStatus[] = ['sent', 'delivered', 'read', 'failed'];
-	const nextStatus = status ?? options[Math.floor(Math.random() * options.length)];
+	const seededContactId = seededCampaign.contactIds[0];
+	if (!seededContactId) {
+		return null;
+	}
+
+	if (status) {
+		return pushEvent({
+			campaignId: seededCampaign.id,
+			contactId: seededContactId,
+			status
+		});
+	}
+
+	const candidate = events.find((event) => event.status === 'sent' || event.status === 'delivered');
+	if (candidate) {
+		const nextStatus: DeliveryStatus = candidate.status === 'sent' ? 'delivered' : 'read';
+		return pushEvent({
+			campaignId: candidate.campaignId,
+			contactId: candidate.contactId,
+			status: nextStatus
+		});
+	}
+
 	return pushEvent({
-		campaignId: campaign.id,
-		contactId: contact.id,
-		status: nextStatus
+		campaignId: seededCampaign.id,
+		contactId: seededContactId,
+		status: 'sent'
 	});
 }
