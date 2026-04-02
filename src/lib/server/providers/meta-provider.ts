@@ -102,15 +102,23 @@ export function createMetaWhatsAppProvider(): WhatsAppProvider {
 							continue;
 						}
 						const unixTs = Number(statusItem.timestamp ?? '0');
-						events.push({
-							providerMessageId: statusItem.id,
-							recipientPhone: statusItem.recipient_id,
+						const parsedItem: ParsedStatusEvent = {
 							status: mapMetaStatus(statusItem.status),
 							occurredAt:
 								Number.isFinite(unixTs) && unixTs > 0
 									? new Date(unixTs * 1000).toISOString()
 									: new Date().toISOString()
-						});
+						};
+
+						if (statusItem.id !== undefined) {
+							parsedItem.providerMessageId = statusItem.id;
+						}
+
+						if (statusItem.recipient_id !== undefined) {
+							parsedItem.recipientPhone = statusItem.recipient_id;
+						}
+
+						events.push(parsedItem);
 					}
 				}
 			}

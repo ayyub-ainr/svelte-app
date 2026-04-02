@@ -41,9 +41,13 @@ export function createContact(payload: Pick<Contact, 'name' | 'phone' | 'tag'>) 
 		id: crypto.randomUUID(),
 		name: payload.name,
 		phone: payload.phone,
-		tag: payload.tag,
 		createdAt: new Date().toISOString()
 	};
+
+	if (payload.tag !== undefined) {
+		contact.tag = payload.tag;
+	}
+
 	contacts.unshift(contact);
 	return contact;
 }
