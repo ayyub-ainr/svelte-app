@@ -229,6 +229,36 @@ h3,
 	gap: 0.6rem;
 }
 
+.empty-state {
+	margin-top: 0.9rem;
+	padding: 0.8rem;
+	border: 1px dashed #cbd5e1;
+	border-radius: 0.65rem;
+	background: #f8fafc;
+	color: #334155;
+	font-weight: 500;
+}
+
+.learn-note {
+	margin-top: 0.95rem;
+	padding: 0.8rem;
+	border-left: 4px solid #0f766e;
+	border-radius: 0.45rem;
+	background: #ecfeff;
+}
+
+.learn-note h3 {
+	font-size: 0.98rem;
+	margin: 0 0 0.3rem;
+}
+
+.learn-note p {
+	margin: 0;
+	font-size: 0.92rem;
+	line-height: 1.5;
+	color: #155e75;
+}
+
 .list li {
 	display: grid;
 	gap: 0.2rem;

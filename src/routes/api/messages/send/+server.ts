@@ -1,6 +1,7 @@
 import { sendCampaignNow } from '$lib/server/mock-store';
 import { json } from '@sveltejs/kit';
 
+// Route handler delegates business rules to the service layer and only handles HTTP concerns.
 export async function POST({ request }) {
 	const body = await request.json().catch(() => ({}));
 

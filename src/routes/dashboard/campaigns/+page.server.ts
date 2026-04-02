@@ -1,6 +1,7 @@
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
+// Load/actions are the server boundary: pages stay presentation-only while mutations are validated here.
 export const load: PageServerLoad = async ({ fetch }) => {
 	const [campaignResponse, contactResponse] = await Promise.all([
 		fetch('/api/campaigns'),

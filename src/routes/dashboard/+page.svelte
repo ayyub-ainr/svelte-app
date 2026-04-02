@@ -17,7 +17,10 @@
 
 <section>
 	<h1>Automation Overview</h1>
-	<p>Simulate webhook events and monitor message lifecycle metrics.</p>
+	<p>
+		Simulate webhook events and monitor message lifecycle metrics. Data auto-refreshes every 5
+		seconds.
+	</p>
 	{#if form?.error}
 		<p class="feedback error">{form.error}</p>
 	{:else if form?.success}
@@ -44,13 +47,27 @@
 		<button class="primary" type="submit">Simulate status event</button>
 	</form>
 
-	<ul class="panel list">
-		{#each data.events as event (event.id)}
-			<li>
-				<strong>{event.status}</strong>
-				<span>Campaign: {event.campaignId}</span>
-				<em>{event.timestamp}</em>
-			</li>
-		{/each}
-	</ul>
+	{#if data.events.length === 0}
+		<p class="empty-state">
+			No events yet. Use send-now or run simulation to populate live delivery data.
+		</p>
+	{:else}
+		<ul class="panel list">
+			{#each data.events as event (event.id)}
+				<li>
+					<strong>{event.status}</strong>
+					<span>Campaign: {event.campaignId}</span>
+					<em>{event.timestamp}</em>
+				</li>
+			{/each}
+		</ul>
+	{/if}
+
+	<aside class="learn-note">
+		<h3>Learning Note</h3>
+		<p>
+			This page demonstrates a timed revalidation pattern using `invalidateAll()` for near-real-time
+			dashboard views without adding WebSocket complexity.
+		</p>
+	</aside>
 </section>

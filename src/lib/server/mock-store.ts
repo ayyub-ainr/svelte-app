@@ -1,5 +1,6 @@
 import type { Campaign, Contact, DeliveryStatus, MessageEvent, ScheduledMessage } from '$lib/types';
 
+// Service abstraction used by route handlers; swap this module when introducing a real provider or database.
 const contacts: Contact[] = [
 	{
 		id: crypto.randomUUID(),

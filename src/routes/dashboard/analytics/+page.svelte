@@ -35,6 +35,11 @@
 <section>
 	<h1>Analytics</h1>
 	<p>Track campaign outcomes from simulated WhatsApp delivery events.</p>
+	{#if total === 0}
+		<p class="empty-state">
+			No analytics yet. Generate events from Overview or Campaigns to see rates.
+		</p>
+	{/if}
 
 	<div class="kpi-grid">
 		<article class="kpi-card">
@@ -52,4 +57,12 @@
 	</div>
 
 	<button class="primary" onclick={loadStatus}>Refresh analytics</button>
+
+	<aside class="learn-note">
+		<h3>Learning Note</h3>
+		<p>
+			The analytics cards use `$derived` values from a shared status summary model, making metrics
+			deterministic and easy to migrate to a real provider later.
+		</p>
+	</aside>
 </section>
